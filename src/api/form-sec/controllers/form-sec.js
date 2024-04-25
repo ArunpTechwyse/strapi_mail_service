@@ -12,18 +12,18 @@ const { createCoreController } = require('@strapi/strapi').factories;
 module.exports = createCoreController('api::form-sec.form-sec',
 ({ strapi }) => ({
 
-  async find(ctx) {
-    // your custom logic for modifying the input
-    ctx.query = { ...ctx.query, locale: "en" }; // force ctx.query.locale to 'en' regardless of what was requested
+//   async find(ctx) {
+//     // your custom logic for modifying the input
+//     ctx.query = { ...ctx.query, locale: "en" }; // force ctx.query.locale to 'en' regardless of what was requested
 
-    // Call the default parent controller action
-    const result = await super.find(ctx);
+//     // Call the default parent controller action
+//     const result = await super.find(ctx);
 
-    // your custom logic for modifying the output
-    result.meta.date = Date.now(); // change the date that is returned
+//     // your custom logic for modifying the output
+//     result.meta.date = Date.now(); // change the date that is returned
 
-    return result;
-  },
+//     return result;
+//   },
 
   async create(ctx) {
     // some logic here
@@ -41,14 +41,8 @@ module.exports = createCoreController('api::form-sec.form-sec',
 
     const email = response.data.attributes.email;
     const message = response.data.attributes.message;
-
-
-
+    
     await sendEmail(email,'Testing',message);
-
-
-
-
     return response;
   },
 
