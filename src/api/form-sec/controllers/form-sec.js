@@ -40,9 +40,11 @@ module.exports = createCoreController('api::form-sec.form-sec',
     console.log(".....");
 
     const email = response.data.attributes.email;
-    const message = response.data.attributes.message;
-    
-    await sendEmail(email,'Testing',message);
+  //  const message = response.data.attributes.message;
+
+    // await sendEmail(email,'Testing',message);
+    await sendEmail(email,'Testing',"this is a conformation message");
+
     return response;
   },
 
