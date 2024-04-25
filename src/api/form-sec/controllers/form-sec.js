@@ -43,7 +43,7 @@ module.exports = createCoreController('api::form-sec.form-sec',
   //  const message = response.data.attributes.message;
 
     // await sendEmail(email,'Testing',message);
-    await sendEmail(email,'Testing',"this is a conformation message");
+    await sendEmail(email,'Testing',"hey dear ,,,this is a confirmation message");
 
     return response;
   },
