@@ -1,57 +1,54 @@
-'use strict';
-const nodemailer = require('nodemailer');
-const { sendEmail } = require('../../customContact/controllers/customContact');
+// form-sec.js
 
-/**
- * form-sec controller
- */
+require('dotenv').config();
+const nodemailer = require('nodemailer');
+
+async function sendEmail(to, subject, text) {
+    console.log("sending email...");
+    // Create a Nodemailer transporter using Gmail
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        auth: {
+          user: process.env.EMAIL_USER, // Use environment variable
+          pass: process.env.EMAIL_PASS, // Use environment variable
+        },
+    });
+
+    // Define email options
+    const mailOptions = {
+        from: process.env.EMAIL_USER, // Sender address
+        to: to, // List of recipients
+        subject: subject, // Subject line
+        text: text, // Plain text body
+    };
+
+    // Send the email
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email sent: ' + info.response);
+    } catch (error) {
+      console.error('Error sending email: ' + error);
+    }
+}
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-
 module.exports = createCoreController('api::form-sec.form-sec',
 ({ strapi }) => ({
+    async create(ctx) {
+        console.log("entered to create")
+        const response = await super.create(ctx);
 
-//   async find(ctx) {
-//     // your custom logic for modifying the input
-//     ctx.query = { ...ctx.query, locale: "en" }; // force ctx.query.locale to 'en' regardless of what was requested
+        console.log(response);
+        console.log("response");
 
-//     // Call the default parent controller action
-//     const result = await super.find(ctx);
-
-//     // your custom logic for modifying the output
-//     result.meta.date = Date.now(); // change the date that is returned
-
-//     return result;
-//   },
-
-  async create(ctx) {
-    // some logic here
-    console.log("entered to create")
-    const response = await super.create(ctx);
-    // some more logic
-  
-    console.log(response);
-     console.log("response");
-    console.log(response.data.attributes.email);
-
-    console.log(response['data']['attributes']['email']);
-
-    console.log(".....");
-
-    const email = response.data.attributes.email;
-  //  const message = response.data.attributes.message;
-
-    // await sendEmail(email,'Testing',message);
-    await sendEmail(email,'Testing',"hey dear ,,,this is a confirmation message");
-
-    return response;
-  },
-
-
-
-
-})
-);
-
-
+        const email = response.data.attributes.email;
+        const name = response.data.attributes.name;
+        // Send email
+        await sendEmail(email, 'Testing', `hey dear ${name}, this is a confirmation message`);
+        
+        return response;
+        
+    },
+}));
